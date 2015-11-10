@@ -1,0 +1,223 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package g.c_ai;
+
+import java.util.*;
+
+/**
+ *
+ * @author Sheng Li
+ */
+public class GC_AI {
+
+    public static int squareNumber(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter the size you want your battlefield is:");
+        int size = reader.nextInt();
+        return size;
+    }
+    
+    public static String setDirection(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter the direction you want your plane heads to(up,down,left,right):");
+        String direction = reader.nextLine();
+        return direction;
+    }
+    
+    public static int setRow(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter the row you want to set your plane:");
+        int row = reader.nextInt();
+        return row;
+    }
+    public static int setColumn(){
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Enter the column you want to set your plane:");
+        int column = reader.nextInt();
+        return column;
+    }
+    
+    public static int[][] initBattlefield(int row_column){
+        int[][] btlField = new int[row_column][row_column];
+        for(int initRow = 0; initRow < row_column; initRow++)
+            for(int initColumn = 0; initColumn < row_column; initColumn++){
+                btlField[initRow][initColumn] = 0;
+        }
+        return btlField;
+    }
+    
+    public static boolean checkOccupied(int spot){
+        if(spot == 1){
+            return false;//false means occupied already
+        }
+        else return true;//true means not occupied
+    }
+    
+    public static int[][] setCraft(int row,int column, String direction, int[][] battleField){
+            switch(direction){
+                case "up":
+                    int[][] record = new int [10][2];
+                    int i = 0;
+                    //center
+                    if(checkOccupied(battleField[row][column])){
+                        record[i][0] = row;
+                        record[i][1] = column;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //head
+                    if(checkOccupied(battleField[row-1][column])){
+                        record[i][0] = row-1;
+                        record[i][0] = column;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //left wing root
+                    if(checkOccupied(battleField[row][column-1])){
+                        record[i][0] = row;
+                        record[i][1] = column-1;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //left wing rear
+                    if(checkOccupied(battleField[row][column-2])){
+                        record[i][0] = row;
+                        record[i][1] = column-2;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //right wing root
+                    if(checkOccupied(battleField[row][column+1])){
+                        record[i][0] = row;
+                        record[i][0] = column+1;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //right wing rear
+                    if(checkOccupied(battleField[row][column+2])){
+                        record[i][0] = row;
+                        record[i][1] = column+2;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //body
+                    if(checkOccupied(battleField[row+1][column])){
+                        record[i][0] = row+1;
+                        record[i][1] = column;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //rear center
+                    if(checkOccupied(battleField[row+2][column])){
+                        record[i][0] = row+2;
+                        record[i][1] = column;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //rear left
+                    if(checkOccupied(battleField[row+2][column-1])){
+                        record[i][0] = row+2;
+                        record[i][1] = column-1;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    //rear right
+                    if(checkOccupied(battleField[row+2][column+1])){
+                        record[i][0] = row+2;
+                        record[i][1] = column+1;
+                        i++;
+                    }
+                    else
+                    {
+                        System.out.println("Spot already occupied!");
+                        break;
+                    }
+                    for(int j=0 ;j<i;j++)
+                    {
+                        battleField[record[j][0]][record[j][1]] = 1;
+                    }
+                    break;
+                case "down":
+                    break;
+                case "left":
+                    break;
+                case "right":
+                    break;
+                default:
+                    break;
+            }
+            return battleField;
+    }
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        int[][] battleField;
+        int btlFieldSz = squareNumber();
+        String direction = setDirection();
+        int rowOfCenter = setRow();
+        int columnOfCenter = setColumn();
+        
+        battleField = initBattlefield(btlFieldSz);
+        for(int i = 0; i < btlFieldSz; i++){
+            for(int j = 0; j < btlFieldSz; j++)
+            {
+                System.out.print(battleField[i][j] + " ");
+            }
+            System.out.println();
+        }
+        
+        System.out.println();
+        
+        battleField = setCraft(rowOfCenter,columnOfCenter,direction,battleField);
+        for(int i = 0; i < btlFieldSz; i++){
+            for(int j = 0; j < btlFieldSz; j++)
+            {
+                System.out.print(battleField[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+    
+}
